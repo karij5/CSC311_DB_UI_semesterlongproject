@@ -9,10 +9,10 @@ import java.sql.*;
 public class DbConnectivityClass {
     final static String DB_NAME="CSC311_BD_TEMP";
         MyLogger lg= new MyLogger();
-        final static String SQL_SERVER_URL = "jdbc:mysql://server.mariadb.database.azure.com";//update this server name
-        final static String DB_URL = "jdbc:mysql://server.mariadb.database.azure.com/"+DB_NAME;//update this database name
-        final static String USERNAME = "csc311admin@server";// update this username
-        final static String PASSWORD = "FARM";// update this password
+        final static String SQL_SERVER_URL = "jdbc:mysql://csc311courseserverkarij5.mariadb.database.azure.com/";//update this server name
+        final static String DB_URL = "jdbc:mysql://csc311courseserverkarij5.mariadb.database.azure.com/CSC311DB3" ;//update this database name
+        final static String USERNAME = "csc311admin@csc311courseserverkarij5";// update this username
+        final static String PASSWORD = "SyossetToHuntington1179111743";// update this password
 
 
         private final ObservableList<Person> data = FXCollections.observableArrayList();
@@ -58,9 +58,15 @@ public class DbConnectivityClass {
                 //First, connect to MYSQL server and create the database if not created
                 Connection conn = DriverManager.getConnection(SQL_SERVER_URL, USERNAME, PASSWORD);
                 Statement statement = conn.createStatement();
-                statement.executeUpdate("CREATE DATABASE IF NOT EXISTS "+DB_NAME+"");
+                statement.executeUpdate("CREATE DATABASE IF NOT EXISTS CSC311DB3");
                 statement.close();
                 conn.close();
+
+                Connection conn1 = DriverManager.getConnection(SQL_SERVER_URL, USERNAME, PASSWORD);
+                Statement statement1 = conn1.createStatement();
+                statement1.executeUpdate("DROP TABLE users");
+                statement1.close();
+                conn1.close();
 
                 //Second, connect to the database and create the table "users" if cot created
                 conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
