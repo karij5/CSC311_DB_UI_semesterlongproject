@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class SignUpController {
     public void createNewAccount(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText("Info for the user. Message goes here");
+        alert.setContentText("Account created. Return to the login page to now sign in.");
         alert.showAndWait();
     }
 

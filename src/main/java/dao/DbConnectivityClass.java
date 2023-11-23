@@ -7,10 +7,10 @@ import service.MyLogger;
 
 import java.sql.*;
 public class DbConnectivityClass {
-    final static String DB_NAME="CSC311_BD_TEMP";
+    final static String DB_NAME="CSC311DB2";
         MyLogger lg= new MyLogger();
         final static String SQL_SERVER_URL = "jdbc:mysql://csc311courseserverkarij5.mariadb.database.azure.com/";//update this server name
-        final static String DB_URL = "jdbc:mysql://csc311courseserverkarij5.mariadb.database.azure.com/CSC311DB3" ;//update this database name
+        final static String DB_URL = "jdbc:mysql://csc311courseserverkarij5.mariadb.database.azure.com/CSC311DB2" ;//update this database name
         final static String USERNAME = "csc311admin@csc311courseserverkarij5";// update this username
         final static String PASSWORD = "SyossetToHuntington1179111743";// update this password
 
@@ -24,7 +24,7 @@ public class DbConnectivityClass {
             connectToDatabase();
             try {
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "SELECT * FROM users ";
+                String sql = "SELECT * FROM users2 ";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (!resultSet.isBeforeFirst()) {
@@ -58,20 +58,16 @@ public class DbConnectivityClass {
                 //First, connect to MYSQL server and create the database if not created
                 Connection conn = DriverManager.getConnection(SQL_SERVER_URL, USERNAME, PASSWORD);
                 Statement statement = conn.createStatement();
-                statement.executeUpdate("CREATE DATABASE IF NOT EXISTS CSC311DB3");
+                statement.executeUpdate("CREATE DATABASE IF NOT EXISTS CSC311DB2");
                 statement.close();
                 conn.close();
 
-                Connection conn1 = DriverManager.getConnection(SQL_SERVER_URL, USERNAME, PASSWORD);
-                Statement statement1 = conn1.createStatement();
-                statement1.executeUpdate("DROP TABLE users");
-                statement1.close();
-                conn1.close();
+
 
                 //Second, connect to the database and create the table "users" if cot created
                 conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
                 statement = conn.createStatement();
-                String sql = "CREATE TABLE IF NOT EXISTS users (" + "id INT( 10 ) NOT NULL PRIMARY KEY AUTO_INCREMENT,"
+                String sql = "CREATE TABLE IF NOT EXISTS users2 (" + "id INT( 10 ) NOT NULL PRIMARY KEY AUTO_INCREMENT,"
                         + "first_name VARCHAR(200) NOT NULL," + "last_name VARCHAR(200) NOT NULL,"
                         + "department VARCHAR(200),"
                         + "major VARCHAR(200),"
@@ -81,7 +77,7 @@ public class DbConnectivityClass {
 
                 //check if we have users in the table users
                 statement = conn.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM users");
+                ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM users2");
 
                 if (resultSet.next()) {
                     int numUsers = resultSet.getInt(1);
@@ -97,6 +93,30 @@ public class DbConnectivityClass {
                 e.printStackTrace();
             }
 
+            /*
+            try (Connection connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
+                DatabaseMetaData metaData = connection.getMetaData();
+                ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
+
+                while (tables.next()) {
+                    String tableName = tables.getString("users2");
+                    System.out.println("Table: " + tableName);
+
+                    ResultSet columns = metaData.getColumns(null, null, tableName, null);
+                    while (columns.next()) {
+                        String columnName = columns.getString("COLUMN_NAME");
+                        String columnType = columns.getString("TYPE_NAME");
+                        System.out.println("  Column: " + columnName + " (" + columnType + ")");
+                    }
+                    columns.close();
+                }
+                tables.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            */
+             //above was used for testing, had to restructure the database
+
             return hasRegistredUsers;
         }
 
@@ -104,7 +124,7 @@ public class DbConnectivityClass {
             connectToDatabase();
             try {
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "SELECT * FROM users WHERE last_name = ?";
+                String sql = "SELECT * FROM users2 WHERE last_name = ?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setString(1, name);
 
@@ -131,7 +151,7 @@ public class DbConnectivityClass {
             connectToDatabase();
             try {
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "SELECT * FROM users ";
+                String sql = "SELECT * FROM users2 ";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -159,7 +179,7 @@ public class DbConnectivityClass {
             connectToDatabase();
             try {
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "INSERT INTO users (first_name, last_name, department, major, email, imageURL) VALUES (?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO users2 (first_name, last_name, department, major, email, imageURL) VALUES (?, ?, ?, ?, ?, ?)";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setString(1, person.getFirstName());
                 preparedStatement.setString(2, person.getLastName());
@@ -182,7 +202,7 @@ public class DbConnectivityClass {
             connectToDatabase();
             try {
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "UPDATE users SET first_name=?, last_name=?, department=?, major=?, email=?, imageURL=? WHERE id=?";
+                String sql = "UPDATE users2 SET first_name=?, last_name=?, department=?, major=?, email=?, imageURL=? WHERE id=?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setString(1, p.getFirstName());
                 preparedStatement.setString(2, p.getLastName());
@@ -204,7 +224,7 @@ public class DbConnectivityClass {
             connectToDatabase();
             try {
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "DELETE FROM users WHERE id=?";
+                String sql = "DELETE FROM users2 WHERE id=?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
@@ -221,7 +241,7 @@ public class DbConnectivityClass {
             int id;
             try {
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "SELECT id FROM users WHERE email=?";
+                String sql = "SELECT id FROM users2 WHERE email=?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setString(1, p.getEmail());
 
