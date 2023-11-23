@@ -405,7 +405,7 @@ public class DB_GUI_Controller implements Initializable {
             if(last_name.getText() != null && last_name.getText() != null && department.getText() != null &&
                     major.getSelectionModel() != null && email.getText() != null && imageURL.getText() != null) {
                 Person p = new Person(last_name.getText(), last_name.getText(), department.getText(),
-                        major.getSelectionModel().toString(), email.getText(), imageURL.getText());
+                        major.getValue().toString(), email.getText(), imageURL.getText());
                 cnUtil.insertUser(p);
                 cnUtil.retrieveId(p);
                 p.setId(cnUtil.retrieveId(p));
@@ -472,7 +472,7 @@ public class DB_GUI_Controller implements Initializable {
 
         int index = data.indexOf(p);
         Person p2 = new Person(index + 1, last_name.getText(), last_name.getText(), department.getText(),
-                major.getSelectionModel().toString(), email.getText(),  imageURL.getText());
+                major.getValue().toString(), email.getText(),  imageURL.getText());
         cnUtil.editUser(p.getId(), p2);
         data.remove(p);
         data.add(index, p2);
@@ -510,10 +510,10 @@ public class DB_GUI_Controller implements Initializable {
     @FXML
     protected void selectedItemTV(MouseEvent mouseEvent) {
         Person p = tv.getSelectionModel().getSelectedItem();
-        last_name.setText(p.getFirstName());
+        first_name.setText(p.getFirstName());
         last_name.setText(p.getLastName());
         department.setText(p.getDepartment());
-        major.setSelectionModel(null);
+        major.getSelectionModel().clearSelection();
         email.setText(p.getEmail());
         imageURL.setText(p.getImageURL());
         updateText.setText(p.getFirstName() + p.getLastName() + " is now selected.");
